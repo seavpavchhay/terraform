@@ -22,6 +22,9 @@ jobs:
       (contains(github.event.pull_request.files.*.filename, '00-modules/') || 
        contains(github.event.pull_request.files.*.filename, '05-infra/dev/')))
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
       - name: Echo Plan Dev
         run: echo "plan dev"
 
@@ -34,6 +37,9 @@ jobs:
       (contains(github.event.pull_request.files.*.filename, '00-modules/') || 
        contains(github.event.pull_request.files.*.filename, '05-infra/uat/')))
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Echo Plan UAT
         run: echo "plan uat"
 
@@ -46,6 +52,9 @@ jobs:
       (contains(github.event.pull_request.files.*.filename, '00-modules/') ||
        contains(github.event.pull_request.files.*.filename, '05-infra/prod/')))
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Echo Plan Prod
         run: echo "plan prod"
           
@@ -57,6 +66,9 @@ jobs:
     environment:
       name: dev
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Echo Apply Dev
         run: echo "apply dev"
     
@@ -68,6 +80,9 @@ jobs:
     environment:
       name: uat
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Echo Apply UAT
         run: echo "apply uat"
 
@@ -79,5 +94,8 @@ jobs:
     environment:
       name: prod
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
       - name: Echo Apply Prod
         run: echo "apply prod"
