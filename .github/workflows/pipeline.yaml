@@ -17,47 +17,38 @@ jobs:
     name: Terraform Plan DEV
     runs-on: ubuntu-latest
     if: |
-      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
-      (github.event_name == 'pull_request' &&
-      (contains(github.event.pull_request.changed_files, '00-modules/') || 
-       contains(github.event.pull_request.changed_files, '05-infra/dev/')))
+      github.event_name == 'push' || 
+      (github.event_name == 'pull_request' && 
+       (contains(toJSON(github.event.pull_request.files.*.filename), '00-modules/') || 
+        contains(toJSON(github.event.pull_request.files.*.filename), '05-infra/dev/')))
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        
-      - name: Echo Plan Dev
-        run: echo "plan dev"
 
   terraform-plan-uat:
     name: Terraform Plan UAT
     runs-on: ubuntu-latest
     if: |
-      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
-      (github.event_name == 'pull_request' &&
-      (contains(github.event.pull_request.changed_files, '00-modules/') || 
-       contains(github.event.pull_request.changed_files, '05-infra/uat/')))
+      github.event_name == 'push' || 
+      (github.event_name == 'pull_request' && 
+       (contains(toJSON(github.event.pull_request.files.*.filename), '00-modules/') || 
+        contains(toJSON(github.event.pull_request.files.*.filename), '05-infra/uat/')))
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Echo Plan UAT
-        run: echo "plan uat"
 
   terraform-plan-prod:
     name: Terraform Plan Prod
     runs-on: ubuntu-latest
     if: |
-      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
-      (github.event_name == 'pull_request' &&
-      (contains(github.event.pull_request.changed_files, '00-modules/') ||
-       contains(github.event.pull_request.changed_files, '05-infra/prod/')))
+      github.event_name == 'push' || 
+      (github.event_name == 'pull_request' && 
+       (contains(toJSON(github.event.pull_request.files.*.filename), '00-modules/') || 
+        contains(toJSON(github.event.pull_request.files.*.filename), '05-infra/prod/')))
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Echo Plan Prod
-        run: echo "plan prod"
-          
   terraform-apply-dev:
     name: Terraform Apply DEV
     needs: terraform-plan-dev
@@ -69,12 +60,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Echo Apply Dev
-        run: echo "apply dev"
-    
   terraform-apply-uat:
     name: Terraform Apply UAT
-    needs: terraform-plan-uat
+    needs: [terraform-plan-uat, terraform-apply-dev]
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     environment:
@@ -83,12 +71,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Echo Apply UAT
-        run: echo "apply uat"
-
   terraform-apply-prod:
     name: Terraform Apply Prod
-    needs: terraform-plan-prod
+    needs: [terraform-plan-prod, terraform-apply-uat]
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     environment:
@@ -96,6 +81,3 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Echo Apply Prod
-        run: echo "apply prod"
