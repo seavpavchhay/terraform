@@ -21,20 +21,18 @@ jobs:
       github.event_name == 'pull_request' &&
       (contains(github.event.pull_request.changed_files, '00-modules/') || 
        contains(github.event.pull_request.changed_files, '05-infra/dev/'))
-    
     steps:
       - name: Echo Plan Dev
         run: echo "plan dev"
 
-    terraform-plan-uat:
+  terraform-plan-uat:
     name: Terraform Plan UAT
     runs-on: ubuntu-latest
     if: |
       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
       github.event_name == 'pull_request' &&
       (contains(github.event.pull_request.changed_files, '00-modules/') || 
-       contains(github.event.pull_request.changed_files, '05-infra/uat/'))
-    
+      contains(github.event.pull_request.changed_files, '05-infra/uat/'))
     steps:
       - name: Echo Plan UAT
         run: echo "plan uat"
@@ -48,7 +46,6 @@ jobs:
       github.event_name == 'pull_request' &&
       (contains(github.event.pull_request.changed_files, '00-modules/') ||
        contains(github.event.pull_request.changed_files, '05-infra/prod/'))
-
     steps:
       - name: Echo Plan Prod
         run: echo "plan prod"
