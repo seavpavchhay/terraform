@@ -19,8 +19,8 @@ jobs:
     if: |
       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
       (github.event_name == 'pull_request' &&
-      (contains(github.event.pull_request.files.*.filename, '00-modules/') || 
-       contains(github.event.pull_request.files.*.filename, '05-infra/dev/')))
+      (contains(github.event.pull_request.changed_files, '00-modules/') || 
+       contains(github.event.pull_request.changed_files, '05-infra/dev/')))
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -34,8 +34,8 @@ jobs:
     if: |
       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
       (github.event_name == 'pull_request' &&
-      (contains(github.event.pull_request.files.*.filename, '00-modules/') || 
-       contains(github.event.pull_request.files.*.filename, '05-infra/uat/')))
+      (contains(github.event.pull_request.changed_files, '00-modules/') || 
+       contains(github.event.pull_request.changed_files, '05-infra/uat/')))
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -49,8 +49,8 @@ jobs:
     if: |
       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
       (github.event_name == 'pull_request' &&
-      (contains(github.event.pull_request.files.*.filename, '00-modules/') ||
-       contains(github.event.pull_request.files.*.filename, '05-infra/prod/')))
+      (contains(github.event.pull_request.changed_files, '00-modules/') ||
+       contains(github.event.pull_request.changed_files, '05-infra/prod/')))
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -96,6 +96,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        
+
       - name: Echo Apply Prod
         run: echo "apply prod"
