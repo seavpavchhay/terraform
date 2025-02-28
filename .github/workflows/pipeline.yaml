@@ -1,0 +1,87 @@
+name: Terraform Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '00-modules/**'
+      - '05-infra/**'
+  pull_request:
+    paths:
+      - '00-modules/**'
+      - '05-infra/**'
+
+jobs:
+  terraform-plan-dev:
+    name: Terraform Plan DEV
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      github.event_name == 'pull_request' &&
+      (contains(github.event.pull_request.changed_files, '00-modules/') || 
+       contains(github.event.pull_request.changed_files, '05-infra/dev/'))
+    
+    steps:
+      - name: Echo Plan Dev
+        run: echo "plan dev"
+
+    terraform-plan-uat:
+    name: Terraform Plan UAT
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      github.event_name == 'pull_request' &&
+      (contains(github.event.pull_request.changed_files, '00-modules/') || 
+       contains(github.event.pull_request.changed_files, '05-infra/uat/'))
+    
+    steps:
+      - name: Echo Plan UAT
+        run: echo "plan uat"
+
+
+  terraform-plan-prod:
+    name: Terraform Plan Prod
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      github.event_name == 'pull_request' &&
+      (contains(github.event.pull_request.changed_files, '00-modules/') ||
+       contains(github.event.pull_request.changed_files, '05-infra/prod/'))
+
+    steps:
+      - name: Echo Plan Prod
+        run: echo "plan prod"
+          
+  terraform-apply-dev:
+    name: Terraform Apply DEV
+    needs: terraform-plan-dev
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment:
+      name: dev
+    steps:
+      - name: Echo Apply Dev
+        run: echo "applly dev"
+    
+  terraform-apply-dev:
+    name: Terraform Apply UAT
+    needs: terraform-plan-uat
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment:
+      name: uat
+    steps:
+      - name: Echo Apply Dev
+        run: echo "applly uat"
+
+  terraform-apply-prod:
+    name: Terraform Apply Prod
+    needs: terraform-plan-prod
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment:
+      name: prod
+    steps:
+      - name: Echo Apply Prod
+        run: echo "apply prod"
