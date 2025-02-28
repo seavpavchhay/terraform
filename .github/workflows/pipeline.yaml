@@ -4,10 +4,13 @@ on:
   push:
     branches:
       - main
-      
+    paths:
+      - '00-modules/**'
+      - '05-infra/**'
   pull_request:
-    branches:
-      - main
+    paths:
+      - '00-modules/**'
+      - '05-infra/**'
 
 jobs:
   terraform-plan-dev:
