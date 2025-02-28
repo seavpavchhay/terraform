@@ -4,23 +4,15 @@ on:
   push:
     branches:
       - main
-    paths:
-      - '00-modules/**'
-      - '05-infra/**'
+      
   pull_request:
-    paths:
-      - '00-modules/**'
-      - '05-infra/**'
+    branches:
+      - main
 
 jobs:
   terraform-plan-dev:
     name: Terraform Plan DEV
     runs-on: ubuntu-latest
-    if: |
-      github.event_name == 'push' || 
-      (github.event_name == 'pull_request' && 
-       (contains(toJSON(github.event.pull_request.files.*.filename), '00-modules/') || 
-        contains(toJSON(github.event.pull_request.files.*.filename), '05-infra/dev/')))
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -28,11 +20,6 @@ jobs:
   terraform-plan-uat:
     name: Terraform Plan UAT
     runs-on: ubuntu-latest
-    if: |
-      github.event_name == 'push' || 
-      (github.event_name == 'pull_request' && 
-       (contains(toJSON(github.event.pull_request.files.*.filename), '00-modules/') || 
-        contains(toJSON(github.event.pull_request.files.*.filename), '05-infra/uat/')))
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -40,11 +27,6 @@ jobs:
   terraform-plan-prod:
     name: Terraform Plan Prod
     runs-on: ubuntu-latest
-    if: |
-      github.event_name == 'push' || 
-      (github.event_name == 'pull_request' && 
-       (contains(toJSON(github.event.pull_request.files.*.filename), '00-modules/') || 
-        contains(toJSON(github.event.pull_request.files.*.filename), '05-infra/prod/')))
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
