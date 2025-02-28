@@ -64,7 +64,7 @@ jobs:
       - name: Echo Apply Dev
         run: echo "applly dev"
     
-  terraform-apply-dev:
+  terraform-apply-uat:
     name: Terraform Apply UAT
     needs: terraform-plan-uat
     runs-on: ubuntu-latest
