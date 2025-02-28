@@ -18,9 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     if: |
       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
-      github.event_name == 'pull_request' &&
-      (contains(github.event.pull_request.changed_files, '00-modules/') || 
-       contains(github.event.pull_request.changed_files, '05-infra/dev/'))
+      (github.event_name == 'pull_request' &&
+      (contains(github.event.pull_request.files.*.filename, '00-modules/') || 
+       contains(github.event.pull_request.files.*.filename, '05-infra/dev/')))
     steps:
       - name: Echo Plan Dev
         run: echo "plan dev"
@@ -30,22 +30,21 @@ jobs:
     runs-on: ubuntu-latest
     if: |
       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
-      github.event_name == 'pull_request' &&
-      (contains(github.event.pull_request.changed_files, '00-modules/') || 
-      contains(github.event.pull_request.changed_files, '05-infra/uat/'))
+      (github.event_name == 'pull_request' &&
+      (contains(github.event.pull_request.files.*.filename, '00-modules/') || 
+       contains(github.event.pull_request.files.*.filename, '05-infra/uat/')))
     steps:
       - name: Echo Plan UAT
         run: echo "plan uat"
-
 
   terraform-plan-prod:
     name: Terraform Plan Prod
     runs-on: ubuntu-latest
     if: |
       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
-      github.event_name == 'pull_request' &&
-      (contains(github.event.pull_request.changed_files, '00-modules/') ||
-       contains(github.event.pull_request.changed_files, '05-infra/prod/'))
+      (github.event_name == 'pull_request' &&
+      (contains(github.event.pull_request.files.*.filename, '00-modules/') ||
+       contains(github.event.pull_request.files.*.filename, '05-infra/prod/')))
     steps:
       - name: Echo Plan Prod
         run: echo "plan prod"
@@ -59,7 +58,7 @@ jobs:
       name: dev
     steps:
       - name: Echo Apply Dev
-        run: echo "applly dev"
+        run: echo "apply dev"
     
   terraform-apply-uat:
     name: Terraform Apply UAT
@@ -69,8 +68,8 @@ jobs:
     environment:
       name: uat
     steps:
-      - name: Echo Apply Dev
-        run: echo "applly uat"
+      - name: Echo Apply UAT
+        run: echo "apply uat"
 
   terraform-apply-prod:
     name: Terraform Apply Prod
